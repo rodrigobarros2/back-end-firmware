@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id @default(cuid())
+  name  String
+  email String @unique
+
+  stripeCustomerId         String?
+  stripeSubscriptionId     String?
+  stripeSubscriptionStatus String?
+
+  createdAt DateTime @default(now())
+
+  @@map("users")
+}
+
+model Firmware {
+  id        String   @id @default(cuid())
+  name      String
+  brand     String
+  createdAt DateTime @default(now())
+
+  @@map("firmwares")
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  sessionId     String   @unique // ID da sessão de checkout do Stripe
+  status        String // Status do pagamento (ex: succeeded, pending, failed)
+  amount        Int // Valor do pagamento em centavos (ex: 1000 para 10.00)
+  currency      String // Moeda utilizada no pagamento (ex: "usd", "brl")
+  paymentMethod String? // Método de pagamento (ex: "card")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("payments")
+}
