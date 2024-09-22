@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(cuid())
+  id    Int    @id @default(autoincrement())
   name  String
   email String @unique
 
@@ -22,21 +22,24 @@ model User {
 }
 
 model Firmware {
-  id        String   @id @default(cuid())
-  name      String
-  brand     String
-  createdAt DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  modelo        String
+  descricao     String
+  link          String
+  versao        Int?
+  comoAtualizar String?
+  createdAt     DateTime @default(now())
 
   @@map("firmwares")
 }
 
 model Payment {
-  id            String   @id @default(cuid())
-  sessionId     String   @unique // ID da sessão de checkout do Stripe
-  status        String // Status do pagamento (ex: succeeded, pending, failed)
-  amount        Int // Valor do pagamento em centavos (ex: 1000 para 10.00)
-  currency      String // Moeda utilizada no pagamento (ex: "usd", "brl")
-  paymentMethod String? // Método de pagamento (ex: "card")
+  id            Int      @id @default(autoincrement())
+  sessionId     String   @unique
+  status        String
+  amount        Int
+  currency      String
+  paymentMethod String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

@@ -1,7 +1,6 @@
 import stripe from "../config/stripe";
 
 export class PaymentService {
-  // Método para criar uma sessão de pagamento
   async createCheckoutSession(priceId: string) {
     return stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -28,6 +27,11 @@ export class PaymentService {
       if (event.type === "checkout.session.completed") {
         const session = event.data.object;
         console.log("Payment successful!", session);
+      }
+      if (event.type === "payment_intent.succeeded") {
+        const paymentIntent = event.data.object;
+        console.log(`Pagamento bem-sucedido: ${paymentIntent.id}`);
+        // Faça algo com os dados do pagamento (ex: salvar no banco)
       }
       return event;
     } catch (error) {
