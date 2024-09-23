@@ -36,4 +36,37 @@ router.post("/create-payment-intent", async (req, res) => {
   }
 });
 
+router.post("/create-subscription-intent", async (req, res) => {
+  try {
+    const { priceId } = req.body;
+
+    const priceMap = {
+      monthly: "price_1Q29IOI9OwHmBWHRgiEDUSZ6", // Substitua pelo ID real do Stripe para o plano mensal
+      quarterly: "price_1Q29K6I9OwHmBWHRW7e05RPn", // Substitua pelo ID real do Stripe para o plano anual (se aplicável)
+      yearly: "price_1Q29LzI9OwHmBWHRh4o1aHtc", // Substitua pelo ID real do Stripe para o plano anual (se aplicável)
+    };
+    
+    const mappedPriceId = priceMap[priceId];
+    console.log("🚀 ~ router.post ~ mappedPriceId:", mappedPriceId)
+
+    // Crie um cliente (você pode querer armazenar isso no seu banco de dados)
+    const customer = await stripe.customers.create();
+
+    // Crie uma assinatura
+    const subscription = await stripe.subscriptions.create({
+      customer: customer.id,
+      items: [{ price: mappedPriceId }],
+      payment_behavior: "default_incomplete",
+      expand: ["latest_invoice.payment_intent"],
+    });
+
+    res.send({
+      subscriptionId: subscription.id,
+      clientSecret: subscription.latest_invoice.payment_intent.client_secret,
+    });
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
 export default router;

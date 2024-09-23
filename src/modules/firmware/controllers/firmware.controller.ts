@@ -30,7 +30,8 @@ export class FirmwareController {
   async findById(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
-      const firmware = await firmwareService.findById(id);
+      const firmware = await firmwareService.findById(Number(id));
+      console.log("🚀 ~ FirmwareController ~ findById ~ firmware:", firmware);
 
       if (!firmware) {
         return res.status(404).json({ message: "Firmware not found" });

@@ -13,14 +13,15 @@ export class FirmwareRepository {
     return prisma.firmware.findMany();
   }
 
-  async findById(id: string): Promise<Firmware | null> {
+  async findById(id: number): Promise<Firmware | null> {
+    console.log("🚀 ~ FirmwareRepository ~ findById ~ id:", id);
     return prisma.firmware.findUnique({
       where: { id },
     });
   }
 
   async update(
-    id: string,
+    id: number,
     data: Partial<Omit<Firmware, "id" | "createdAt">>
   ): Promise<Firmware> {
     return prisma.firmware.update({
@@ -29,7 +30,7 @@ export class FirmwareRepository {
     });
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: number): Promise<void> {
     await prisma.firmware.delete({
       where: { id },
     });

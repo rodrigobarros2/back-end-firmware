@@ -16,7 +16,7 @@ export class FirmwareService {
     return this.firmwareRepository.findAll();
   }
 
-  async findById(id: string): Promise<Firmware | null> {
+  async findById(id: number): Promise<Firmware | null> {
     return this.firmwareRepository.findById(id);
   }
 
